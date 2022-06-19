@@ -224,7 +224,7 @@ GetFights = () =>{
 			vals.getClanMemberList += (data.responseData.socialbar_list[i].is_guild_member ? 1 : 0);
 		}
 
-		MainParser.SocialbarList(data.responseData.socialbar_list);
+		//MainParser.SocialbarList(data.responseData.socialbar_list);
 
 		MainParser.UpdatePlayerDict(
 			data.responseData.socialbar_list,
@@ -478,14 +478,17 @@ GetFights = () =>{
 		if (data.requestMethod === 'getNeighborList' || data.requestMethod === 'getFriendsList' || data.requestMethod === 'getClanMemberList') {
 			MainParser.UpdatePlayerDict(data.responseData, 'PlayerList', data.requestMethod);
 		}
-		if (data.requestMethod === 'getClanMemberList') 
-			MainParser.SocialbarList(data.responseData);
+		//if (data.requestMethod === 'getClanMemberList') 
+		//  MainParser.SocialbarList(data.responseData);
 
 		if (data.requestMethod === 'getSocialList') {
 			if (data.responseData.friends) 
 				MainParser.UpdatePlayerDict(data.responseData.friends, 'PlayerList', 'getFriendsList');
 			if (data.responseData.guildMembers) 
+			{
 				MainParser.UpdatePlayerDict(data.responseData.guildMembers, 'PlayerList', 'getClanMemberList');
+				MainParser.SocialbarList(data.responseData.guildMembers);
+			}
 			if (data.responseData.neighbours) 
 				MainParser.UpdatePlayerDict(data.responseData.neighbours, 'PlayerList', 'getNeighborList');
 		}
