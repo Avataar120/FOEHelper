@@ -36,6 +36,7 @@ let BlackListBuildingsString = [
 	'R_MultiAge_Battlegrounds1', //Ehrenstatue
 	'R_MultiAge_SummerBonus21', //Repaire du pirate
 	'R_MultiAge_PatrickBonus21', //Temple des druides
+	'R_MultiAge_SoccerBonus22', //Moulin des gentianes
 ];
 
 // grau darzustellende Produktionen
