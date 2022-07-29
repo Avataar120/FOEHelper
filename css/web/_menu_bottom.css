@@ -37,7 +37,8 @@
 	height: inherit;
 }
 
-.hud-bottom .hud-btn, .hud-bottom .menu-placeholder {
+.hud-bottom .hud-btn,
+.hud-bottom .menu-placeholder {
 	float: left;
 }
 

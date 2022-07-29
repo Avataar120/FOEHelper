@@ -126,7 +126,8 @@ let HiddenRewards = {
                 starts: Rewards[idx].startTime,
                 expires: Rewards[idx].expireTime,
                 isGE: isGE,
-                positionGE: positionX
+                positionGE: positionX,
+                isAlreadyThere: false
             });
         }
 
@@ -147,9 +148,13 @@ let HiddenRewards = {
         HiddenRewards.FilteredCache = [];
         for (let i = 0; i < HiddenRewards.Cache.length; i++) {
 	    let StartTime = moment.unix(HiddenRewards.Cache[i].starts|0),
-		EndTime = moment.unix(HiddenRewards.Cache[i].expires);
+		    EndTime = moment.unix(HiddenRewards.Cache[i].expires);
             HiddenRewards.Cache[i].isVis = true;
-            if (StartTime > MainParser.getCurrentDateTime() || EndTime < MainParser.getCurrentDateTime()) continue;
+            
+            if ( StartTime > MainParser.getCurrentDateTime() ) HiddenRewards.Cache[i].isAlreadyThere = false; 
+                else HiddenRewards.Cache[i].isAlreadyThere = true; 
+            
+                if (/*StartTime > MainParser.getCurrentDateTime() ||*/ EndTime < MainParser.getCurrentDateTime()) continue;
             if (HiddenRewards.Cache[i].isGE && !(HiddenRewards.GElookup[HiddenRewards.Cache[i].positionGE] <= Math.floor((HiddenRewards.GEprogress % 32)/8))) {
                 HiddenRewards.Cache[i].isVis = false;
             }
@@ -208,7 +213,13 @@ let HiddenRewards = {
                 }
                 h.push('<td class="incident" title="' + HTML.i18nTooltip(hiddenReward.type) + '"><img src="' + extUrl + 'js/web/hidden-rewards/images/' + img + '.png" alt=""></td>');
                 h.push('<td>' + hiddenReward.position + '</td>');
-                h.push('<td class="">' + i18n('Boxes.HiddenRewards.Disappears') + ' ' + moment.unix(hiddenReward.expires).fromNow() + '</td>');
+                
+                let StartTime = moment.unix(hiddenReward.starts|0)
+                if ( StartTime > MainParser.getCurrentDateTime() )
+                    h.push('<td class=""><p style="color:#A9A9A9";>' + moment.unix(StartTime/1000).fromNow()  + '</p></td>');
+                else
+                    h.push('<td class=""><b>' + i18n('Boxes.HiddenRewards.Disappears') + ' ' + moment.unix(hiddenReward.expires).fromNow() + '</b></td>');
+                
                 h.push('</tr>');
             }
         }
@@ -227,11 +238,18 @@ let HiddenRewards = {
 	SetCounter: ()=> {
         let list = HiddenRewards.FilteredCache || [];
         let count = list.length;
+
+        count = list.filter ( x=> x.isAlreadyThere ).length;
+        let countToCome = list.filter ( x=> !(x.isAlreadyThere) ).length;
+
         let CountRelics = JSON.parse(localStorage.getItem('CountRelics') || 0);
-        if (CountRelics == 1) count = list.filter(x => x.isVis).length;
-        if (CountRelics == 2) count = list.filter(x => !x.isGE).length;
+        if (CountRelics == 1) count = list.filter((x => x.isVis) && (x => x.isAlreadyThere) ).length;
+        if (CountRelics == 2) count = list.filter((x => !x.isGE) && (x => x.isAlreadyThere) ).length;
+        
         $('#hidden-reward-count').text(count).show();
+        $('#hidden-reward-count-toCome').text(countToCome).show();
         if (count === 0) $('#hidden-reward-count').hide();
+        if (countToCome === 0) $('#hidden-reward-count-toCome').hide();
 	},
     
     ShowSettingsButton: () => {
