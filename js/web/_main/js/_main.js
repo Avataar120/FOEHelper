@@ -1521,7 +1521,7 @@ let MainParser = {
 	 * @param PlayerName
 	 */
 	GetPlayerLink: (PlayerID, PlayerName) => {
-		if (Settings.GetSetting('ShowPlayerLinks'))
+		if (Settings.GetSetting('ShowLinks'))
 		{
 			let PlayerLink = HTML.i18nReplacer(PlayerLinkFormat, { 'world': ExtWorld.toUpperCase(), 'playerid': PlayerID });
 
@@ -1536,10 +1536,10 @@ let MainParser = {
 	 * @param GuildID
 	 * @param GuildName
 	 */
-	GetGuildLink: (GuildID, GuildName) => {
-		if (Settings.GetSetting('ShowPlayerLinks'))
+	GetGuildLink: (GuildID, GuildName, WorldId) => {
+		if (Settings.GetSetting('ShowLinks'))
 		{
-			let GuildLink = HTML.i18nReplacer(GuildLinkFormat, { 'world': ExtWorld.toUpperCase(), 'guildid': GuildID });
+			let GuildLink = HTML.i18nReplacer(GuildLinkFormat, { 'world': WorldId.toUpperCase(), 'guildid': GuildID });
 
 			return `<a class="external-link game-cursor" href="${GuildLink}" target="_blank">${GuildName} ${LinkIcon}</a>`;
 		}
@@ -1553,7 +1553,7 @@ let MainParser = {
 	 * @param BuildingName
 	 */
 	GetBuildingLink: (BuildingID, BuildingName) => {
-		if (Settings.GetSetting('ShowPlayerLinks'))
+		if (Settings.GetSetting('ShowLinks'))
 		{
 			let BuildingLink = HTML.i18nReplacer(BuildingsLinkFormat, {'buildingid': BuildingID });
 
