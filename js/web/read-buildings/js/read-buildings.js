@@ -321,14 +321,17 @@ let Reader = {
 		
         h.push(`
 <div style="margin: 3px 5px">
-${HTML.i18nReplacer(i18n('Boxes.Neighbors.AttackingArmy'), {
-   attatt: `<b>${boosts.AttackAttackBoost}</b>`,
-   attdef: `<b>${boosts.AttackDefenseBoost}</b>`
-})}
-<br />
-${HTML.i18nReplacer(i18n('Boxes.Neighbors.DefendingArmy'), {
-    defatt: `<b>${boosts.DefenseAttackBoost}</b>`,
-    defdef: `<b>${boosts.DefenseDefenseBoost}</b>`})}
+${i18n('Boxes.Neighbors.AttackingArmy')} 
+${`<b>${boosts.AttackAttackBoost}</b>`}
+${` / `}
+${`<b>${boosts.AttackDefenseBoost}</b>`}
+
+<br>
+${i18n('Boxes.Neighbors.DefendingArmy')} 
+${`<b>${boosts.DefenseAttackBoost}</b>`}
+${` / `}
+${`<b>${boosts.DefenseDefenseBoost}</b>`}
+
 <br>
 ${Repel}
 </div>

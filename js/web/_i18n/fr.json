@@ -1336,6 +1336,8 @@
     "Settings.Version.Title": "Version",
     "Settings.Version.World": "ID Monde :",
     "StrategyPoints.BuyableFP": "Nombre de Points Forge pouvant être achetés avec des pièces.",
+    "Boxes.Neighbors.AttackingArmy": "Bonus armée d'attaque : ",
+    "Boxes.Neighbors.DefendingArmy": "Bonus armée de défense : ",
     "YYYYMMDD": "AAAA-MM-JJ",
     "_Language": "Français"
 }
