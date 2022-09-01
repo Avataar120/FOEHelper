@@ -546,7 +546,7 @@ const FoEproxy = (function () {
 		if (proxyEnabled) {
 			const data = getRequestData(this);
 			data.postData = postData;
-			xhrOnSend(postData);
+			//xhrOnSend(postData);
 			this.addEventListener('load', xhrOnLoadHandler, { capture: false, passive: true });
 		}
 
