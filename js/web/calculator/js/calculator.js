@@ -37,6 +37,8 @@ let Calculator = {
 	DefaultButtons: [
 		80, 85, 90, 'ark', 95
 	],
+	ClanId: null,
+	ClanName: null,
 
 	/**
 	 * Show calculator
@@ -143,6 +145,7 @@ let Calculator = {
         // Wenn sich Spieler geändert hat, dann BuildingName/PlayerName zurücksetzen
 		if (Calculator.CityMapEntity['player_id'] !== Calculator.LastPlayerID) {
 			Calculator.PlayerName = undefined;
+			Calculator.ClanId = undefined;
 			Calculator.ClanName = undefined;
 		}
 
@@ -164,6 +167,7 @@ let Calculator = {
 			Calculator.PlayerName = PlayerDict[PlayerID]['PlayerName'];
 		}
 		if (PlayerDict[PlayerID] !== undefined && PlayerDict[PlayerID]['ClanName'] !== undefined) {
+			Calculator.ClanId = PlayerDict[PlayerID]['ClanId'];
 			Calculator.ClanName = PlayerDict[PlayerID]['ClanName'];
 		}
 
@@ -181,7 +185,7 @@ let Calculator = {
 			h.push('<span class="player-name">' + MainParser.GetPlayerLink(PlayerID, Calculator.PlayerName));
 
 			if (Calculator.ClanName) {
-				h.push(`</br>[${Calculator.ClanName}]`);
+				h.push(`</br>[${MainParser.GetGuildLink(Calculator.ClanId, Calculator.ClanName)}]`);
 			}
 
 			h.push('</span>');
