@@ -90,6 +90,12 @@
 		"sort": 13
 	},
 	{
+		"name": "Auctions",
+		"status": false,
+		"group": "Boxes",
+		"sort": 13
+	},
+	{
 		"name": "ShowScoutingTimes",
 		"status": true,
 		"group": "Boxes",
