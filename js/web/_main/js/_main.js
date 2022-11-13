@@ -335,6 +335,7 @@ GetFights = () =>{
 	FoEproxy.addHandler('AnnouncementsService', 'fetchAllAnnouncements', (data, postData) => {
 		ActiveMap = 'main';
 		$('#fp-bar').removeClass(possibleMaps).addClass(ActiveMap);
+		MainParser.HideEgSidebar();
 	});
 
 	// gex is entered
@@ -1145,6 +1146,27 @@ let MainParser = {
 		}
 	},
 	
+	egServiceAddButton: ()=> {
+		hud = $('#eg-hud');
+		
+		if ( EgStillPossible ) 
+			s='<div class="eg-hud-btn eg-hud-btn" title="" data-original-title="FoE Helper: Nombre d\'essais restant pour la Première Frappe."><span class="eg_feasible icon"></span><span id="first_strike-bonus" class="bonus" style="display: none;"></span></div>';
+		else
+			s='<div class="eg-hud-btn eg-hud-btn-red" title="" data-original-title="FoE Helper: Nombre d\'essais restant pour la Première Frappe."><span class="eg_feasible icon"></span><span id="first_strike-bonus" class="bonus" style="display: none;"></span></div>';
+			
+		hud.append(s);
+
+		
+	},
+
+	HideEgSidebar: ()=> {
+		if($('#eg-hud').length > 0){
+			$('#eg-hud').fadeToggle(function(){
+				$(this).remove();
+			});
+		}
+	},
+
 	Championship: (d)=> {
 
 		if ( localStorage.getItem('AvaSend') == 'OKToTransfer')
@@ -1177,7 +1199,31 @@ let MainParser = {
 					( !EgStillPossible ) && 
 					( Ranking[i].points != 133.3 ) ) 
 						EgStillPossible = true;
-				
+
+					if($('#eg-hud').length === 0)
+					{
+		
+						HTML.AddCssFile('eg-service');
+		
+						let div = $('<div />');
+	
+						div.attr({
+							id: 'eg-hud',
+							class: 'game-cursor'
+						});
+	
+						{
+							div.css({
+								top: 350,
+								right: 0
+							});
+						}
+	
+						$('body').append(div).promise().done(function(){
+							MainParser.egServiceAddButton();
+						});
+					}
+			
 				RequeteHttp = "https://foe.avataar120.com/index.php?" + 
 					"type=UpdateChampionship" +
 					"&GuildID=" + Ranking[i].participantId +

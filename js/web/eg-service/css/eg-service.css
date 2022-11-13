@@ -1,0 +1,53 @@
+#eg-hud {
+    position: absolute;
+    right: 0;
+    z-index: 750;
+
+    top: 100px;
+
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 0.75rem;
+    font-weight: 400;
+}
+
+#eg-hud .eg-hud-btn {
+    left: 5px;
+    width: 37px;
+    height: 37px;
+    background-image: none;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), url('../../../../css/images/hud/box-bg.png') 0 0 no-repeat;
+    border-radius: 50% 0 0 50%;
+    border: 2px solid var(--hud-border-success);
+    border-right: none;
+    margin: 2px 0;
+    box-shadow: 1px -1px 1px var(--black-50);
+}
+
+#eg-hud .eg-hud-btn.eg-hud-btn-red {
+    border-color: var(--hud-border-error);
+    opacity: 0.9;
+}
+
+.eg-hud-btn span:first-child {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-flex;
+    width: 70%;
+    height: 70%;
+    margin-top: 15%;
+}
+
+#eg-hud .eg-hud-btn span.icon {
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 29px;
+    height: 29px;
+    left: 6px;
+    top: 3px;
+}
+
+#eg-hud .eg_feasible {
+    background-image: url('../../x_img/expedition.png');
+}
