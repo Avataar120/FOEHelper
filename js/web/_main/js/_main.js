@@ -55,7 +55,9 @@ let ApiURL = 'https://api.foe-rechner.de/',
 	PlayerLinkFormat = 'https://foe.scoredb.io/__world__/Player/__playerid__',
 	GuildLinkFormat = 'https://foe.scoredb.io/__world__/Guild/__guildid__',
 	BuildingsLinkFormat = 'https://forgeofempires.fandom.com/wiki/__buildingid__',
-	LinkIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="22pt" height="22pt" viewBox="0 0 22 22"><g><path id="foehelper-external-link-icon" d="M 13 0 L 13 2 L 18.5625 2 L 6.28125 14.28125 L 7.722656 15.722656 L 20 3.4375 L 20 9 L 22 9 L 22 0 Z M 0 4 L 0 22 L 18 22 L 18 9 L 16 11 L 16 20 L 2 20 L 2 6 L 11 6 L 13 4 Z M 0 4 "/></g></svg>';
+	LinkIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="22pt" height="22pt" viewBox="0 0 22 22"><g><path id="foehelper-external-link-icon" d="M 13 0 L 13 2 L 18.5625 2 L 6.28125 14.28125 L 7.722656 15.722656 L 20 3.4375 L 20 9 L 22 9 L 22 0 Z M 0 4 L 0 22 L 18 22 L 18 9 L 16 11 L 16 20 L 2 20 L 2 6 L 11 6 L 13 4 Z M 0 4 "/></g></svg>',
+	EgRank = 0,
+	EgStillPossible = true;
 
 // Übersetzungen laden
 let i18n_loaded = false;
@@ -333,6 +335,7 @@ GetFights = () =>{
 	FoEproxy.addHandler('AnnouncementsService', 'fetchAllAnnouncements', (data, postData) => {
 		ActiveMap = 'main';
 		$('#fp-bar').removeClass(possibleMaps).addClass(ActiveMap);
+		MainParser.HideEgSidebar();
 	});
 
 	// gex is entered
@@ -608,6 +611,10 @@ GetFights = () =>{
 	
 	FoEproxy.addHandler('GuildExpeditionService', 'getContributionList', (data, postData) => {
 		MainParser.GuildExpedition(data.responseData);
+	});
+
+	FoEproxy.addHandler('GuildExpeditionService', 'getOverview', (data, postData) => {
+		MainParser.GuildExpeditionOverview(data.responseData);
 	});
 	
 	FoEproxy.addHandler('ClanService', 'getClanData', (data, postData) => {
@@ -1098,13 +1105,22 @@ let MainParser = {
 			
 			let xhr = new XMLHttpRequest();
 			
-			for ( let i in d ) {
-				data = url + 'type=UpdateGuildExpedition' + '&PlayerID=' + d[i].player.player_id + '&Week=' + MainParser.getWeekNumber(new Date()) + '&Rencontres=' + d[i].solvedEncounters;
-				xhr.open('GET', data, false);
-				xhr.send(data);
-				
+			if ( EgStillPossible) 
+			{
+				for ( let i in d ) {
+					data = url + 'type=UpdateGuildExpedition' + '&PlayerID=' + d[i].player.player_id + '&Week=' + MainParser.getWeekNumber(new Date()) + '&Rencontres=' + d[i].solvedEncounters;
+					xhr.open('GET', data, false);
+					xhr.send(data);
+					
+				}
 			}
 		}
+	},
+
+	GuildExpeditionOverview: (d)=> {
+
+		EgRank = d.championship.rank;
+		if ( EgRank != 1 ) EgStillPossible = false; else EgStillPossible = true;
 	},
 	
 	UpdateGuild: (d) => {
@@ -1130,6 +1146,27 @@ let MainParser = {
 		}
 	},
 	
+	egServiceAddButton: ()=> {
+		hud = $('#eg-hud');
+		
+		if ( EgStillPossible ) 
+			s='<div class="eg-hud-btn eg-hud-btn" title="" data-original-title="FoE Helper: Nombre d\'essais restant pour la Première Frappe."><span class="eg_feasible icon"></span><span id="first_strike-bonus" class="bonus" style="display: none;"></span></div>';
+		else
+			s='<div class="eg-hud-btn eg-hud-btn-red" title="" data-original-title="FoE Helper: Nombre d\'essais restant pour la Première Frappe."><span class="eg_feasible icon"></span><span id="first_strike-bonus" class="bonus" style="display: none;"></span></div>';
+			
+		hud.append(s);
+
+		
+	},
+
+	HideEgSidebar: ()=> {
+		if($('#eg-hud').length > 0){
+			$('#eg-hud').fadeToggle(function(){
+				$(this).remove();
+			});
+		}
+	},
+
 	Championship: (d)=> {
 
 		if ( localStorage.getItem('AvaSend') == 'OKToTransfer')
@@ -1156,7 +1193,37 @@ let MainParser = {
 
 				Http.open("GET", RequeteHttp, false);
 				Http.send();
-				
+
+				if ( 
+					( i == 0 ) && 
+					( !EgStillPossible ) && 
+					( Ranking[i].points != 133.3 ) ) 
+						EgStillPossible = true;
+
+					if($('#eg-hud').length === 0)
+					{
+		
+						HTML.AddCssFile('eg-service');
+		
+						let div = $('<div />');
+	
+						div.attr({
+							id: 'eg-hud',
+							class: 'game-cursor'
+						});
+	
+						{
+							div.css({
+								top: 350,
+								right: 0
+							});
+						}
+	
+						$('body').append(div).promise().done(function(){
+							MainParser.egServiceAddButton();
+						});
+					}
+			
 				RequeteHttp = "https://foe.avataar120.com/index.php?" + 
 					"type=UpdateChampionship" +
 					"&GuildID=" + Ranking[i].participantId +
