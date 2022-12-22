@@ -1,6 +1,81 @@
 ## Changelog - Extension
 
-##### 2.12.0.1
+##### 3.0.0.1
+
+**BugFix**
+- Statistics:
+	- Script was not always included locally, this is now changed
+
+---
+
+##### 3.0.0.0
+
+**New**
+- Extension:
+	- Compatibility created for new Manifest V3 requirements for Chromium browsers, Firefox will follow only in Q1 2023
+	- several CSS adjustments
+
+**Update**
+- Discord Webhooks:
+	- Copy button added
+	- maximum height for many entries added
+	- test button integrated
+	- as many webhook urls as you like can be added
+	- new functions will follow...
+
+**BugFix**
+- Note function:
+	- Box was not displayed because of a faulty avatar on the left side
+
+---
+
+##### 2.12.2.0
+
+**Update**
+- Discord webhooks:
+	- Copy button added
+	- Maximum height for many entries added
+	- test button integrated
+	- any number of webhook urls can be stored
+    - new functions will follow...
+
+**BugFix**
+- note function:
+	- Box was not displayed because of a faulty avatar on the left side
+
+---
+
+##### 2.12.1.1
+
+**Update**
+- Discord Webhooks:
+  - en/de Help links added
+
+**BugFix**
+- Discord Webhooks:
+	- Now visible for all players
+	- Entries were not displayed after saving
+
+---
+
+##### 2.12.1.0
+
+**New**
+- Discord Webhooks:
+	- (currently only) for the guild battles an event can be triggered which can send a message to the channel - WebHook of a Discord server at the first attack on a sector
+    - more events could follow if there is a need
+
+**Update**
+- enhancement:
+	- future-proof image links for possible changes of the Inno-Hosting policies (timestamp)
+
+**BugFix**
+- Battle Assist:
+	- [#2522](https://github.com/mainIine/foe-helfer-extension/issues/2522) the position of the "Higher Era Unit Lost"-Warning has been corrected in the case that the PVP tournament was not running (Sunday Evening - Monday morning)
+
+---
+
+###### 2.12.0.1
 
 **BugFix**
 - GvG map & log:

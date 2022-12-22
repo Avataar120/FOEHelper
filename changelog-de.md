@@ -1,5 +1,64 @@
 ## Changelog - Extension
 
+##### 3.0.0.1
+
+**BugFix**
+- Statistiken:
+  - Script wurde nicht immer lokal eingebunden, das ist nun geändert
+
+---
+
+##### 3.0.0.0
+
+**Neu**
+- Erweiterung:
+  - Kompatibilität für die neuen Manifest V3 Anforderungen für Chromium-Browser geschaffen, Firefox folgt  im 1 Quartal 2023
+  - diverse CSS Anpassungen
+
+**Update**
+- Discord Webhooks:
+  - Kopieren Button ergänzt
+  - Maximale Höhe für viele Einträge ergänzt
+  - Testbutton integriert
+  - beliebig viele Webhook Urls können hinterlegt werden
+  - neue Funktionen werden folgen...
+
+**BugFix**
+- Notizfunktion: 
+  	- Box wurde wegen eines fehlerhaften Avatar links nicht angezeigt
+
+---
+
+##### 2.12.1.1
+
+**Update**
+- Discord Webhooks:
+  	- en/de Hilfe-Links ergänzt
+
+**BugFix**
+- Discord Webhooks:
+	- nun sichtbar für alle Spieler
+	- Einträge wurden nach dem Speichern nicht angezeigt	
+
+---
+
+##### 2.12.1.0
+
+**Neu**
+- Discord Webhooks:
+	- (derzeit nur) für die Gildengefechte kann ein Event ausgelöst werden, dass beim ersten Angriff auf einen Sektor eine Nachricht an den Kanal-WebHook eines Discord-Servers schicken kann
+  	- weitere Events könnten folgen, wenn bedarf besteht
+
+**Update**
+- Erweiterung:
+	- zukunftssichere Bildlinks für mögliche Änderungen der Inno-Hosting-Richtlinien (Zeitstempel)
+
+**BugFix**
+- Kampfassistent:
+	- [#2522](https://github.com/mainIine/foe-helfer-extension/issues/2522) Die "Überlagerungsbox" war verschoben
+
+---
+
 ##### 2.12.0.1
 
 **BugFix**

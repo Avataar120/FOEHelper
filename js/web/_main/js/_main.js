@@ -11,6 +11,15 @@
  * **************************************************************************************
  */
 
+let ExtbaseData = JSON.parse(localStorage.getItem("HelperBaseData")||"{}");
+const extID = ExtbaseData.extID,
+	extUrl = ExtbaseData.extUrl,
+	GuiLng = ExtbaseData.GuiLng,
+	extVersion = ExtbaseData.extVersion,
+	isRelease = ExtbaseData.isRelease,
+	devMode = ExtbaseData.devMode,
+	loadBeta = ExtbaseData.loadBeta;
+
 {
 	// jQuery detection
 	let intval = -1;
@@ -188,7 +197,6 @@ GetFights = () =>{
 
 		if (idx !== -1) {
 			MainParser.InnoCDN = requestData.url.substring(0, idx + 1);
-			MainParser.sendExtMessage({type: 'setInnoCDN', url: MainParser.InnoCDN});
 			let portraits = {};
 
 			$(xhr.responseText).find('portrait').each(function () {
@@ -401,7 +409,7 @@ GetFights = () =>{
 	FoEproxy.addHandler('FriendService', 'deleteFriend', (data, postData) => {
 		let FriendID = data.responseData;
 		if (PlayerDict[FriendID]) {
-			PlayerDict[FriendID]['isFriend'] = false;
+			PlayerDict[FriendID]['IsFriend'] = false;
 		}
 
 		if ($('#moppelhelper').length === 0) {
@@ -834,7 +842,6 @@ let HelperBeta = {
 	menu: [
 		'unitsGex',
 		'marketOffers',
-		'discord',
 	],
 	active: JSON.parse(localStorage.getItem('HelperBetaActive'))
 };
@@ -1747,18 +1754,6 @@ let MainParser = {
 		});
 
 		ExtPlayerAvatar = d.portrait_id;
-
-		MainParser.sendExtMessage({
-			type: 'setPlayerData',
-			data: {
-				world: ExtWorld,
-				player_id: ExtPlayerID,
-				name: d.user_name,
-				portrait: d.portrait_id,
-				guild_id: d.clan_id,
-				guild_name: d.clan_name
-			}
-		});
 
 		Infoboard.Init();
 	},

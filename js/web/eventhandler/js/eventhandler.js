@@ -1,5 +1,6 @@
 ﻿/*
- * **************************************************************************************
+ * *************************************************************************************
+ *
  * Copyright (C) 2022 FoE-Helper team - All Rights Reserved
  * You may use, distribute and modify this code under the
  * terms of the AGPL license.
@@ -8,7 +9,7 @@
  * https://github.com/mainIine/foe-helfer-extension/blob/master/LICENSE.md
  * for full license details.
  *
- * **************************************************************************************
+ * *************************************************************************************
  */
 
 FoEproxy.addHandler('OtherPlayerService', 'getEventsPaginated', (data, postData) => {
@@ -433,7 +434,7 @@ let EventHandler = {
 		h.push('</tr>');
 
 		let HasGuildPermission = ((ExtGuildPermission & GuildMemberStat.GuildPermission_Leader) > 0 || (ExtGuildPermission & GuildMemberStat.GuildPermission_Founder) > 0);
-		let pImage = `<img style="max-width: 22px" src="${MainParser.InnoCDN}assets/shared/gui/tavern/shop/tavern_shop_boost_shield1_icon.png" title="${i18n('Boxes.MoppelHelper.CityProtected')}" alt="${i18n('Boxes.MoppelHelper.CityProtected')}"></img>`
+		let pImage = `<img style="max-width: 22px" src="${srcLinks.get('/shared/gui/tavern/shop/tavern_shop_boost_shield1_icon.png', true)}" title="${i18n('Boxes.MoppelHelper.CityProtected')}" alt="${i18n('Boxes.MoppelHelper.CityProtected')}"></img>`
 		for (let i = 0; i < PlayerList.length; i++)
 		{
 			let Player = PlayerList[i];
@@ -475,16 +476,16 @@ let EventHandler = {
 			h.push('<tr>');
 			h.push('<td class="is-number" data-number="' + (i + 1) + '">#' + (i + 1) + '</td>');
 
-			h.push(`<td><img style="max-width: 22px" src="${MainParser.InnoCDN + 'assets/shared/avatars/' + (MainParser.PlayerPortraits[Player['Avatar']] || 'portrait_433')}.jpg" alt="${Player['PlayerName']}"></td>`);
+			h.push(`<td><img style="max-width: 22px" src="${srcLinks.GetPortrait(Player['Avatar'])}" alt="${Player['PlayerName']}"></td>`);
 
 			h.push('<td style="white-space:nowrap;text-align:left;" data-text="' + Player['PlayerName'].toLowerCase().replace(/[\W_ ]+/g, "") + '">');
 
 			if (EventHandler.CurrentPlayerGroup === 'Friends' || (EventHandler.CurrentPlayerGroup === 'Guild' && HasGuildPermission)) {
-				h.push(`<img class="small" src="${extUrl}js/web/guildmemberstat/images/act_${Player['Activity']}.png">`);
+				h.push(`<span class="activity activity_${Player['Activity']}"></span> `);
             }
 			h.push(MainParser.GetPlayerLink(Player['PlayerID'], Player['PlayerName']));
 			let pTime=EventHandler.isProtected[Player['PlayerID']] | 0;
-			let pImg= (EventHandler.CurrentPlayerGroup === 'Neighbors' && (pTime == -1 || pTime > MainParser.getTime)) ? pImage : '';
+			let pImg= (EventHandler.CurrentPlayerGroup === 'Neighbors' && (pTime == -1 || pTime * 1000 > MainParser.getCurrentDateTime())) ? pImage : '';
 			h.push(`<td data-text="${i18n('Eras.' + Technologies.Eras[Player['Era']])}">${pImg + i18n('Eras.' + Technologies.Eras[Player['Era']]) + pImg}</td>`);
 
 			h.push('<td class="is-number" data-number="' + Player['Score'] + '">' + HTML.Format(Player['Score']) + '</td>');
