@@ -1,5 +1,56 @@
 ## Changelog - Extension
 
+##### 3.2.1.0
+
+**Update**
+- Merger Game:
+	- geänderte Werte (Inno Update) - sollte jetzt robuster sein, sollten weitere Änderungen kommen
+
+- FP-Einsammlungen:
+	- Geburtstags-Event ergänzt
+	
+---
+
+##### 3.2.0.0
+
+**New**
+- Merger Game (Geburtstagsevent Minispiel)
+	- gibt einen Überblick über die auf dem Spielbrett vorhandenen Schlüsselteile
+
+**Update**
+- Musik-Modul:
+	- neuer Track hinzugefügt (aktuell nur auf Beta-Server verfügbar)
+
+- Event-Kosten Rechner:
+	- zweite Kostenspalte am Ende der Tabelle eingefügt 
+	- Hervorheben der günstigsten Option erfolgt jetzt zusätzlich in der entsprechenden Kostenspalte
+
+- Kits:
+	- Die Liste kann nun gefiltert werden - nach Name des Gegenstands oder des Sets
+
+**BugFix**
+- General:
+	- Spieler-Portraits wurden manchmal nicht angezeigt, wenn Module zu zeitig nach Spielstart geöffnet wurden
+
+---
+
+##### 3.1.0.1
+
+**Update**
+- Spieler-ID hinzugefügt zum Export von:
+	- Expeditionsdaten
+	- GG-Daten
+	- Gildenmitglieder-Daten
+
+**BugFix**
+- Alarme:
+	- Alarme wurden vorzeitig gelöscht
+
+- General:
+	- Die Changelog wurden nicht mehr aufgerufen, nachdem ein Update durchgeführt wurde
+
+---
+
 ##### 3.1.0.0
 
 **Neu**

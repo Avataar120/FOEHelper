@@ -1,10 +1,60 @@
 ## Changelog - Extension
 
+##### 3.2.1.0
+
+**Update**
+- Merger Game:
+	- changes values (Inno Update) - should now be more robust against future changes
+
+- FP-Collector:
+	- added Anniversary-Event
+	
+---
+##### 3.2.0.0
+
+**New**
+- Merger Game (Anniversary Event Mini game)
+	- gives an overview about the key pieces present on the board
+
+**Update**
+- Music-Modul:
+	- added new Track (will be available on live latest with the anniversary event, currently only available on beta)
+
+- Event cost calculator:
+	- second cost column added to the right side of table 
+	- highlighting of the most efficient option now also is in the respective cost column
+
+- Kits:
+	- The list may now be filtered - for name of item or set
+
+**BugFix**
+- General:
+	- Player-Portraits were not loaded when modules were opened too soon after loading the game
+
+---
+
+##### 3.1.0.1
+
+**Update**
+- Player-ID added to the export of:
+	- GE Data
+	- BGB Data
+	- Guild-member-Data
+
+**BugFix**
+- Alerts:
+	- Alerts were deleted prematurely
+
+- General:
+	- Changelogs were not opened anymore after an update was installed
+
+---
+
 ##### 3.1.0.0
 
 **New**
 - GB Tracker:
-	- helps you finding specific GBs - e.g. for BP hunting
+	- helps you find specific GBs - e.g. for BP hunting
 	- while you click through the GB ranking or view GB Lists of other Players (e.g. neighbours, friends, guild) the tracker will record all GB that match your criteria
 	- choose the desired GB, enter a level range you are interested in and go hunting
 	- "resetting" will clear the list and reset the filter
