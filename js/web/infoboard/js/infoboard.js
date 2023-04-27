@@ -44,7 +44,7 @@ FoEproxy.addHandler('all', 'all', (data, postData) => {
 });
 
 /**
- * @type {{MaxEntries: number, DebugWebSocket: boolean, OriginalDocumentTitle: string, TitleBlinkEvent: null, ResetBox: Infoboard.ResetBox, SavedFilter: string[], SoundFile: HTMLAudioElement, SavedTextFilter: string, HandleMessage: Infoboard.HandleMessage, Box: ((function(): (boolean|undefined))|*), History: *[], StartTitleBlinking: Infoboard.StartTitleBlinking, Init: Infoboard.Init, InjectionLoaded: boolean, StopTitleBlinking: Infoboard.StopTitleBlinking, FilterInput: Infoboard.FilterInput, Show: Infoboard.Show, PostMessage: Infoboard.PostMessage, PlayInfoSound: boolean}}
+ * @type {{MaxEntries: number, GbgProvShortNameFl: boolean, DebugWebSocket: boolean, OriginalDocumentTitle: string, TitleBlinkEvent: null, ResetBox: Infoboard.ResetBox, SavedFilter: string[], SoundFile: HTMLAudioElement, SavedTextFilter: string, HandleMessage: Infoboard.HandleMessage, Box: ((function(): (boolean|undefined))|*), History: *[], StartTitleBlinking: Infoboard.StartTitleBlinking, Init: Infoboard.Init, InjectionLoaded: boolean, StopTitleBlinking: Infoboard.StopTitleBlinking, FilterInput: Infoboard.FilterInput, Show: Infoboard.Show, PostMessage: Infoboard.PostMessage, PlayInfoSound: boolean}}
  */
 let Infoboard = {
 
@@ -56,6 +56,7 @@ let Infoboard = {
     DebugWebSocket: false,
     History: [],
     MaxEntries: 0,
+    GbgProvShortNameFl: JSON.parse(localStorage.getItem("InfoBox.Settings.GbgProvShortNameFl") || "false"),
     OriginalDocumentTitle: document.title,
     TitleBlinkEvent: null,
 
@@ -405,7 +406,10 @@ let Infoboard = {
         let EntryCountTitle = i18n('Settings.InfoboxEntryCount.Title'); //Dummy usage. Dont mark i18n key for disposal yet. Might be useful later
 
         let h = [];
-        h.push(`<p><input id="autoStartInfoboard" name="autoStartInfoboard" value="1" type="checkbox" ${(autoOpen === true) ? ' checked="checked"' : ''} /> <label for="autoStartInfoboard">${i18n('Boxes.Settings.Autostart')}</label>`);
+        h.push(`<p><input id="autoStartInfoboard" name="autoStartInfoboard" value="1" type="checkbox" ${(autoOpen === true) ? ' checked="checked"' : ''} />` 
+            + ` <label for="autoStartInfoboard">${i18n('Boxes.Settings.Autostart')}</label>`);
+        h.push(`<p><input id="gbgProvShortNameFl" name="gbgProvShortNameFl" value="1" type="checkbox" ${(Infoboard.GbgProvShortNameFl === true) ? ' checked="checked"' : ''} />` 
+            + ` <label for="gbgProvShortNameFl">${i18n('Boxes.Infobox.Settings.GbgProvShortName')}</label>`);
         h.push(`<p><label for="infoboxentry-length">${i18n('Settings.InfoboxEntryCount.Desc')}</label><input class="setting-input" type="number" id="infoboxentry-length" step="1" min="1" max="2000" value="${(messagesAmount)}"></p>`);
         h.push(`<p><button onclick="Infoboard.SaveSettings()" id="saveInfoboardSettings" class="btn btn-default" style="width:100%">${i18n('Boxes.Settings.Save')}</button></p>`);
 
@@ -417,7 +421,10 @@ let Infoboard = {
     *
     */
     SaveSettings: () => {
+        Infoboard.GbgProvShortNameFl = $("#gbgProvShortNameFl").is(':checked');
+        
         localStorage.setItem('AutoOpenInfoBox', $("#autoStartInfoboard").is(':checked'));
+        localStorage.setItem('InfoBox.Settings.GbgProvShortNameFl', Infoboard.GbgProvShortNameFl);
         localStorage.setItem('EntryCount', $("#infoboxentry-length").val());
 
 		$(`#BackgroundInfoSettingsBox`).remove();
@@ -621,17 +628,22 @@ let Info = {
                 continue;
             }
 
+            let provLabel = Infoboard.GbgProvShortNameFl ? prov['short'] : prov['name'];
+
             if (color) {
                 let tc = colors['highlight'], sc = color['highlight'],
                     ts = colors['shadow'], ss = color['shadow'];
 
-                t += '<span style="color:' + tc + ';text-shadow: 0 1px 1px ' + ts + '">' + p['clan']['name'] + '</span> ⚔ <span style="color:' + sc + ';text-shadow: 0 1px 1px ' + ss + '">' + prov['name'] + '</span> (<strong>' + d['progress'] + '</strong>/<strong>' + d['maxProgress'] + '</strong>)<br>';
+                t += '<span style="color:' + tc + ';text-shadow: 0 1px 1px ' + ts + '">' + p['clan']['name'] + '</span>'
+                  + ' ⚔ <span style="color:' + sc + ';text-shadow: 0 1px 1px ' + ss + '">' + provLabel + '</span>'
+                  + ' (<strong>' + d['progress'] + '</strong>/<strong>' + d['maxProgress'] + '</strong>)<br>';
             }
             else {
                 let tc = colors['highlight'],
                     ts = colors['shadow'];
 
-                t += '<span style="color:' + tc + ';text-shadow: 0 1px 1px ' + ts + '">' + p['clan']['name'] + '</span> ⚔ ' + prov['name'] + ' (<strong>' + d['progress'] + '</strong>/<strong>' + d['maxProgress'] + '</strong>)<br>';
+                t += '<span style="color:' + tc + ';text-shadow: 0 1px 1px ' + ts + '">' + p['clan']['name'] + '</span>'
+                  + ' ⚔ ' + provLabel + ' (<strong>' + d['progress'] + '</strong>/<strong>' + d['maxProgress'] + '</strong>)<br>';
 
             }
 

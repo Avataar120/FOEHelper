@@ -70,12 +70,8 @@ FoEproxy.addHandler('RewardService', 'collectReward', async (data, postData) => 
 		}
 
 		// Add reward incident record
-		await IndexDB.db.statsRewards.add({
-			date: MainParser.getCurrentDate(),
-			type: rewardIncidentSource,
-			amount: reward.amount || 0,
-			reward: reward.id
-		});
+
+		await Stats.addReward(rewardIncidentSource, reward.amount ||0, reward.id);
 	}
 });
 
@@ -177,7 +173,8 @@ let Stats = {
 		isGroupByEra: false,
 		showAnnotations: false, // GvG annotations
 		rewardSource: 'battlegrounds_conquest', // filter by type of reward
-		currentType: null
+		currentType: null,
+		filter:"",
 	},
 
 	/*
@@ -537,6 +534,9 @@ let Stats = {
 								<ul class="horizontal">
 									${btnsRewardSelect.join('')}
 								</ul>
+							</div>
+							<div class="StatsRewardFilter">
+								<input type="text" id="StatsRewardFilter" placeholder="${i18n("Boxes.Stats.FilterRewards")}" value="${Stats.state.filter}" oninput="Stats.state.filter=this.value;Stats.updateCharts();">
 							</div>`;
 		}
 		else {
@@ -827,6 +827,7 @@ let Stats = {
 				name: unitInfo.name,
 				era: era ? i18n('Eras.' + Technologies.Eras[era]) : '',
 				unitId,
+				unitUrl:srcLinks.get("/shared/unit_portraits/armyuniticons_50x50/armyuniticons_50x50_"+unitId+".jpg", true),
 				data: data.map(({date, army}) => [
 					+date,
 					army[unitId] || 0
@@ -837,7 +838,7 @@ let Stats = {
 			series,
 			pointFormat: `<tr>
 								<td>
-									<span class="unit_icon {series.options.unitId}" style="background-image:url('${srcLinks.get("/shared/unit_portraits/armyuniticons_50x50/armyuniticons_50x50_0.png", true)}')"></span>
+									<img src="{series.options.unitUrl}" style="width: 45px; height: 45px; border: 1px white solid; margin-right: 4px;"/>
 								</td>
 								<td>
 									<span style="margin: 0 5px;"><span style="color:{point.color}">●</span> {series.name}: </span>
@@ -1331,9 +1332,13 @@ let Stats = {
 		});
 
 		const seriesMapBySource = groupedByRewardSource[rewardSource] || {};
-		const serieData = Object.keys(seriesMapBySource).map(it => {
+		let serieData = Object.keys(seriesMapBySource).map(it => {
 			const rewardInfo = (rewardTypes.find(r => r.id === it) || {name: it});
-			const iconClass = rewardInfo.type === 'unit' ? `unit_icon ${rewardInfo.subType}" style="background-image:url('${srcLinks.get("/shared/unit_portraits/armyuniticons_50x50/armyuniticons_50x50_0.png", true)}')` : '';
+			const iconClass = "";
+			//if (rewardInfo.type === 'unit') {
+			//	iconClass = `unit_icon ${rewardInfo.subType}" style="background-image:url('${srcLinks.get("/shared/unit_portraits/armyuniticons_50x50/armyuniticons_50x50_"+rewardInfo.subType+".jpg", true)}')`;
+			//	console.log(rewardInfo)
+			//} 
 			// Asset image if not unit
 			let pointImage = '';
 			if (rewardInfo.type != 'unit') {
@@ -1356,14 +1361,31 @@ let Stats = {
 				if (url) {
 					pointImage = `<img src="${url}" style="width: 45px; height: 45px; margin-right: 4px;">`
 				}
+				return {
+					iconClass,
+					pointImage,
+					name: rewardInfo.name,
+					y: seriesMapBySource[it]
+				};
 			}
-			return {
-				iconClass,
-				pointImage,
-				name: rewardInfo.name,
-				y: seriesMapBySource[it]
-			};
+			else {
+				let url	= srcLinks.get("/shared/unit_portraits/armyuniticons_50x50/armyuniticons_50x50_"+rewardInfo.subType+".jpg", true);
+				pointImage = `<img src="${url}" style="width: 45px; height: 45px; margin-right: 4px;">`
+				console.log(rewardInfo)
+				return {
+					iconClass,
+					pointImage,
+					name: rewardInfo.name,
+					y: seriesMapBySource[it]
+				};
+			}
+
 		}).sort((a, b) => b.y - a.y);
+
+		if (Stats.state.filter !="") {
+			serieData = serieData.filter( a => a.name.toLowerCase().includes(Stats.state.filter.toLowerCase()))
+		}
+
 
 		return {
 			title: i18n('Boxes.Stats.Rewards.SourceTitle.' + rewardSource),
@@ -1543,6 +1565,22 @@ let Stats = {
 		}));
 		await IndexDB.db.statsGBGPlayerCache.bulkPut(playersForCache);		
     },
+
+	addReward: async (type,amount,reward) => {
+		//console.log(`add ${type} -  ${reward}: ${amount}`);
+		IndexDB.db.statsRewards.add({
+			date: MainParser.getCurrentDate(),
+			type: type,
+			amount: amount,
+			reward: reward
+		}).catch(error => {
+			if (error.message == "Key already exists in the object store.") {
+				setTimeout(()=>{Stats.addReward(type,amount,reward)},1) //retry if two rewards came in "at the same time"
+			} else {
+				console.log(error)
+			}
+		});
+	}
 };
 let StockAlarm = {
 	Alarms: JSON.parse(localStorage.getItem('StockAlarms') || '[]'),
